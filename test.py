@@ -29,7 +29,7 @@ def get_clustering_coefficient(g):
 
 def get_p_for_connected_graph(n):
     e = 0.0005
-    p = (((1 + e)*math.log(n))/n)*1.2
+    p = (((1 + e)*math.log(n))/n)*1.5
     return p
 
 def task1():
@@ -71,7 +71,7 @@ def task2():
         asp.append(sp)
         print(sp)
     print(asp)
-    plt.plot(ns, asp, 'ko', label="ASP")
+    plt.plot(ns, asp, 'ko', linestyle='--', label="ASP")
     plt.xticks(p_lables)
     plt.axis([0, 600010, 0, 25])
     plt.legend(loc=(0.5, 0.5), numpoints=1)
