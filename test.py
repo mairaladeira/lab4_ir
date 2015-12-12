@@ -6,14 +6,31 @@ __author__ = 'Gabriela and Maira'
 
 
 def get_er_graph(n, p):
-    return nx.erdos_renyi_graph(n, p)
+    """
+    Function to get an ER graph
+    :param n: number of nodes
+    :param p: probability of connection between the nodes
+    :return: ER graph
+    """
+    return nx.fast_gnp_random_graph(n, p)
 
 
 def get_ws_graph(n, p):
-    return nx.watts_strogatz_graph(n, 4, p, seed=None)
+    """
+    Function to get a WS graph with 4 k-nearest-neighbors
+    :param n: number of nodes
+    :param p: probability of connection between the nodes
+    :return: WS graph
+    """
+    return nx.watts_strogatz_graph(n, 4, p)
 
 
 def get_shortest_path_average_len(g):
+    """
+    returns the average shortest path length of a graph
+    :param g: ER or WS graph
+    :return: average shortest path len
+    """
     sps = nx.shortest_path_length(g)
     paths_size = 0
     for n0 in sps.values():
@@ -24,15 +41,29 @@ def get_shortest_path_average_len(g):
 
 
 def get_clustering_coefficient(g):
+    """
+    returns the clustering coefficient of a graph
+    :param g: ER or WS graph
+    :return: clustering coefficient path len
+    """
     return nx.average_clustering(g)
 
 
 def get_p_for_connected_graph(n):
+    """
+    get the appropriated probability for a ER graph according to the number of the nodes of the graph
+    :param n: number of nodes
+    :return: appropriated probability
+    """
     e = 0.0005
-    p = (((1 + e)*math.log(n))/n)*1.5
+    p = (((1 + e)*math.log(n))/n)*1.1
     return p
 
+
 def task1():
+    """
+    Task 1 of the laboratory 4
+    """
     g = get_ws_graph(1000, p=0)
     spa_0 = get_shortest_path_average_len(g)
     cc_0 = get_clustering_coefficient(g)
@@ -61,24 +92,29 @@ def task1():
 
 
 def task2():
-    ns = [10, 30, 50, 70, 90, 110, 130, 150, 170, 190, 200, 250, 300, 350, 500, 1000, 5000, 10000, 200000, 500000]
-    p_lables = [10, 100, 500, 1000, 10000, 200000, 600000]
+    """
+    Task 2 of the laboratory 4
+    """
+    ns = [5, 50, 110, 300, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000]
+    p_lables = [5, 500, 1000, 5000, 10000]
     asp = []
     for n in ns:
         p = get_p_for_connected_graph(n)
         g = get_er_graph(n, p)
+
         sp = get_shortest_path_average_len(g)
         asp.append(sp)
-        print(sp)
+        print(str(p) + ": " + str(sp))
     print(asp)
-    plt.plot(ns, asp, 'ko', linestyle='--', label="ASP")
+    plt.plot(ns, asp, 'ko', linestyle='--', label="Average Shortest Path")
     plt.xticks(p_lables)
-    plt.axis([0, 600010, 0, 25])
-    plt.legend(loc=(0.5, 0.5), numpoints=1)
+    #plt.xscale('exp')
+    plt.axis([-100, 11000, 0, 4])
+    plt.legend(loc=(0.5, 0.2), numpoints=1)
     plt.show()
     return
 
 start_time = time.time()
-#task1()
+task1()
 task2()
 print("--- %s seconds ---" % (time.time() - start_time))
